@@ -1,5 +1,6 @@
 <?php
-session_start()
+session_start();
+require_once 'lista.php';
 ?>
 
 <!DOCTYPE html>
@@ -13,7 +14,7 @@ session_start()
 
 <body>
 
-    <form action="./cadastro-login.php" method="POST">
+    <form method="POST">
         <input type="text" name="email" placeholder="email">
         <input type="text" name="senha" placeholder="senha">
         <input type="text" name="confirma" placeholder="confirma">
@@ -23,64 +24,59 @@ session_start()
     <br>
     <br>
     <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
 
-    <form action="./cadastro-login.php" method="POST">
+    <form method="POST">
         <input type="text" name="logEmail" placeholder="Email">
         <input type="text" name="logSenha" placeholder="Senha">
         <input type="submit" value="Logar">
     </form>
 
     <?php
+
+
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-        $email = $_POST['email'];
-        $senha = $_POST['senha'];
-        $confirma = $_POST['confirma'];
+        if (isset($_POST['email']) && isset($_POST['senha']) && isset($_POST['confirma'])) {
+            $email = $_POST['email'];
+            $senha = $_POST['senha'];
+            $confirma = $_POST['confirma'];
 
-        if ($senha !== $confirma) {
-            echo "Senhas não conferem";
+            if ($confirma === $senha) {
+                $novoCadastro = [
+                    'email' => $email,
+                    'senha' => $senha
+                ];
 
-        } else {
-            if (!isset($_SESSION['email'])) {
-                $_SESSION['email'] = $email;
-
-            } else {
-                echo "Email já cadastrado";
+                if (isset($_SESSION['cadastro'])) {
+                    $_SESSION['cadastro'][] = $novoCadastro;
+                } else {
+                    $_SESSION['cadastro'] = [$novoCadastro];
+                }
+                echo "Cadastro realizado com sucesso!";
             }
-
-            if (!isset($_SESSION['senha'])) {
-                $_SESSION['senha'] = $senha;
-            }
-
+        } else if (isset($_POST['logEmail']) && isset($_POST['logSenha'])) {
             $logEmail = $_POST['logEmail'];
             $logSenha = $_POST['logSenha'];
-            $logEmail = $_SESSION['email'];
-            $logSenha = $_SESSION['senha'];
+            $loginSucesso = false;
 
-            if ($logEmail === $_SESSION['email'] && $logSenha === $_SESSION['senha']) {
-                echo 'Bem vindo, seu login foi bem-sucedido!';
-                
-            } else if ($logEmail !==  $_SESSION['email'] || $logSenha !== $_SESSION['senha']) {
-                echo 'Email ou senha incorretos';
+            if (isset($_SESSION['cadastro'])) {
+                foreach ($_SESSION['cadastro'] as $usuario) {
 
+                    if ($usuario['email'] === $logEmail && $usuario['senha'] === $logSenha) {
+                        $loginSucesso = true;
+
+                        break;
+                    }
+                }
+            }
+            if ($loginSucesso) {
+                echo "Login realizado com sucesso!";
             } else {
-                echo 'Erro ao realizar login';
+                echo "Email ou senha inválidos!";
             }
         }
     }
+    
     ?>
-
-    <?php
-    // unset($_SESSION['email']);
-    // unset($_SESSION['senha']);
-    ?>
-
 </body>
 
 </html>
