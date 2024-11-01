@@ -28,10 +28,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
+    <link rel="stylesheet" href="./dist/output.css">
 </head>
 
-<body>
-    <h2>Login</h2>
+<body class="flex justify-center items-center">
+
+<div class="w-screen h-screen flex flex-col justify-center items-center">
+    <h2 class="text-3xl font-bold underline">Login</h2>
     <form action="login.php" method="POST">
         <input type="email" name="logEmail" placeholder="E-mail" required><br>
         <input type="password" name="logSenha" placeholder="Senha" required><br>
@@ -39,6 +42,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </form>
 
     <a href="./cadastro.php">cadastro</a>
+</div>
+
 </body>
 
 </html>
