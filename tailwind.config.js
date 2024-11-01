@@ -1,7 +1,6 @@
 module.exports = {
   content: [
-      './login.php',
-      './cadastro.php'
+      "./php/**/*.{html,php}",
   ],
   theme: {
       extend: {},
